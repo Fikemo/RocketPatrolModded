@@ -15,6 +15,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('hit2', 'racketHit2.wav');
         this.load.audio('hit3', 'racketHit3.wav');
         this.load.audio('hit4', 'racketHit4.wav');
+        this.load.audio('playMusic', 'playMusic.wav');
     }
 
     create() {
@@ -62,7 +63,7 @@ class Menu extends Phaser.Scene {
             // hard mode
             game.settings = {
                 spaceshipSpeed: 4,
-                gameTimer: 45000,
+                gameTimer: 5000,
             }
             this.sound.play('sfx_select');
             this.scene.start('playScene');

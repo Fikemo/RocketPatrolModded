@@ -32,6 +32,12 @@ class Play extends Phaser.Scene {
         // this.starfield = this.add.tileSprite(0,0,game.config.width,game.config.height, 'starfield').setOrigin(0,0);
         this.court = this.add.sprite(0,0,"court").setOrigin(0,0);
 
+        // this.sound.stopAll();
+        // this.sound.play('playMusic',{volume: 0.2, loop: true});
+
+        this.playMusic = this.sound.add('playMusic');
+        this.playMusic.play();
+
         // this.add.text(20, 20, "ROCKET PATROL PLAY");
         // green UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0,0);
@@ -48,7 +54,6 @@ class Play extends Phaser.Scene {
 
         // add rocket (player 1)
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'whiteRacket').setOrigin(0.75,0.5);
-
         
 
         // add ball
@@ -113,6 +118,8 @@ class Play extends Phaser.Scene {
     update() {
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)){
+            // this.sound.remove('playMusic');
+            this.playMusic.stop();
             this.scene.restart();
         }
 

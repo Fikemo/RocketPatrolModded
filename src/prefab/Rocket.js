@@ -11,6 +11,18 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
         // sound effect
         this.sfxRocket = scene.sound.add('sfx_rocket');
+
+        this.sfxHit1 = scene.sound.add('hit1');
+        this.sfxHit2 = scene.sound.add('hit2');
+        this.sfxHit3 = scene.sound.add('hit3');
+        this.sfxHit4 = scene.sound.add('hit4');
+
+        this.rotations = 360;
+
+        this.angle -= 10;
+
+        this.restPoint = {x: x - 30, y: Math.floor(y - 4)};
+        // console.log(this.restPoint);
     }
 
     update() {
@@ -23,15 +35,32 @@ class Rocket extends Phaser.GameObjects.Sprite {
             }
         }
 
+        this.restPoint.x = this.x - 30;
+        this.restPoint.y = this.y - 4;
+
         // fire button
         if (Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring){
+            this.playHit();
             this.isFiring = true;
-            this.sfxRocket.play(); // play sfx
+            this.rotations = 360/4;
+            // this.sfxRocket.play(); // play sfx
         }
         // if fired, move the rocket up
-        if(this.isFiring && this.y >= borderUISize * 3 + borderPadding){
-            this.y -= this.moveSpeed;
+        // if(this.isFiring && this.y >= borderUISize * 3 + borderPadding){
+        //     this.y -= this.moveSpeed;
+        // }
+
+        if (this.isFiring){
+            this.angle += 4;
+            // console.log(this.angle);
+
+            this.rotations -= 1;
+
+            if (this.rotations <= 0){
+                this.reset();
+            }
         }
+
         // reset on miss
         if (this.y <= borderUISize * 3 + borderPadding){
             this.reset();
@@ -42,5 +71,24 @@ class Rocket extends Phaser.GameObjects.Sprite {
     reset() {
         this.isFiring = false;
         this.y = game.config.height - borderUISize - borderPadding;
+    }
+
+    playHit() {
+        switch(Math.floor(Math.random() * 4)){
+            case 0:
+                this.sfxHit1.play();
+                break;
+            case 1:
+                this.sfxHit2.play();
+                break;
+            case 2:
+                this.sfxHit3.play();
+                break;
+            case 3:
+                this.sfxHit4.play();
+                break;
+            default:
+                console.log("Error: Invalid Sound");
+        }
     }
 }

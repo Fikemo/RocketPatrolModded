@@ -8,6 +8,9 @@ class Play extends Phaser.Scene {
         this.load.image("rocket", "./assets/rocket.png");
         this.load.image("spaceship", "./assets/spaceship.png");
         this.load.image("starfield", "./assets/starfield.png");
+
+        this.load.image("court", "./assets/court.png");
+        this.load.image("whiteRacket", "./assets/whiteRacket.png");
         
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {
@@ -16,10 +19,18 @@ class Play extends Phaser.Scene {
             startFrame: 0,
             endFrame: 9,
         });
+
+        this.load.spritesheet('ball', './assets/ballSpriteSheet.png',{
+            frameWidth: 16,
+            frameHeight: 16,
+            startFrame: 0,
+            endFrame: 3,
+        });
     }
 
     create() {
-        this.starfield = this.add.tileSprite(0,0,game.config.width,game.config.height, 'starfield').setOrigin(0,0);
+        // this.starfield = this.add.tileSprite(0,0,game.config.width,game.config.height, 'starfield').setOrigin(0,0);
+        this.court = this.add.sprite(0,0,"court").setOrigin(0,0);
 
         // this.add.text(20, 20, "ROCKET PATROL PLAY");
         // green UI background
@@ -27,16 +38,21 @@ class Play extends Phaser.Scene {
 
         // white borders
         // top
-        this.add.rectangle(0,0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
+        // this.add.rectangle(0,0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
         // bottom
-        this.add.rectangle(0,game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
+        // this.add.rectangle(0,game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0,0);
         // left
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0,0);
+        // this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0,0);
         //right
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0,0);
+        // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0,0);
 
         // add rocket (player 1)
-        this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5,0);
+        this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'whiteRacket').setOrigin(0.75,0.5);
+
+        
+
+        // add ball
+        this.ball = new Ball(this, game.config.width / 2, game.config.height - borderUISize - borderPadding, 'ball', 0, parent = this.p1Rocket).setOrigin(0.5,0.5);
 
         // add spacehip (x3)
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0,0);
@@ -62,6 +78,8 @@ class Play extends Phaser.Scene {
             frameRate: 30,
         });
 
+        
+
         // initialize score
         this.p1Score = 0;
 
@@ -83,7 +101,7 @@ class Play extends Phaser.Scene {
         // GAME OVER flag
         this.gameOver = false;
 
-        // 60-second play clock
+        // n-second play clock
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
@@ -102,7 +120,7 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
-        this.starfield.tilePositionX -= starSpeed;
+        // this.starfield.tilePositionX -= starSpeed;
         
         if (!this.gameOver){
             // update rocket
@@ -112,6 +130,8 @@ class Play extends Phaser.Scene {
             this.ship01.update();
             this.ship02.update();
             this.ship03.update();
+
+            this.ball.update();
         }
 
         // check collisions

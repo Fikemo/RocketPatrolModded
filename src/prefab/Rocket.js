@@ -1,3 +1,4 @@
+// import Ball from './Ball.js';
 
 // Rocket player prefab
 class Rocket extends Phaser.GameObjects.Sprite {
@@ -23,6 +24,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
         this.restPoint = {x: x - 30, y: Math.floor(y - 4)};
         // console.log(this.restPoint);
+
+        this.ball = scene.ball;
+
+        this.hitActive = false;
     }
 
     update() {
@@ -40,9 +45,9 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
         // fire button
         if (Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring){
-            this.playHit();
+            // this.playHit();
             this.isFiring = true;
-            this.rotations = 360/4;
+            this.rotations = 360/10;
             // this.sfxRocket.play(); // play sfx
         }
         // if fired, move the rocket up
@@ -51,13 +56,19 @@ class Rocket extends Phaser.GameObjects.Sprite {
         // }
 
         if (this.isFiring){
-            this.angle += 4;
+            this.angle += 10;
             // console.log(this.angle);
 
             this.rotations -= 1;
 
             if (this.rotations <= 0){
                 this.reset();
+            }
+
+            if (this.rotations >= (360/10) - 30){
+                this.hitActive = true;
+            } else {
+                this.hitActive = false;
             }
         }
 
@@ -70,6 +81,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
     // reset rocket to "ground"
     reset() {
         this.isFiring = false;
+        this.hitActive = false;
         this.y = game.config.height - borderUISize - borderPadding;
     }
 

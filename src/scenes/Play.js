@@ -35,12 +35,12 @@ class Play extends Phaser.Scene {
         // this.sound.stopAll();
         // this.sound.play('playMusic',{volume: 0.2, loop: true});
 
-        this.playMusic = this.sound.add('playMusic');
+        this.playMusic = this.sound.add('playMusic', {volume: 0.1});
         this.playMusic.play();
 
         // this.add.text(20, 20, "ROCKET PATROL PLAY");
         // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0,0);
+        // this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0,0);
 
         // white borders
         // top
@@ -101,7 +101,7 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100,
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
+        // this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
 
         // GAME OVER flag
         this.gameOver = false;
@@ -157,19 +157,52 @@ class Play extends Phaser.Scene {
             this.shipExplode(this.ship03);
             this.p1Rocket.reset();
         }
+
+        if (this.p1Rocket.hitActive){
+            if (this.checkCollision(this.p1Rocket, this.ball, 0.75, 0.5, 0.5, 0.5)){
+
+                if (this.ball.state.hitByPlayer == false) this.p1Rocket.playHit();
+
+                this.ball.state.hitByPlayer = true;
+                this.ball.state.resting = false;
+            }
+        }
+
+        if (this.ball.state.resting != true){
+            if (this.checkCollision(this.ball, this.ship03, 0.5, 0.5)){
+                console.log("hit ship 3");
+                this.ball.state.hitByPlayer = false
+            }
+        }
     }
 
-    checkCollision(rocket, ship){
-        // simple AABB checking
-        if( rocket.x < ship.x + ship.width
-            && rocket.x + rocket.width > ship.x
-            && rocket.y < ship.y + ship.height
-            && rocket.height + rocket.y > ship.y)
-        {
-            return true;
-        } else {
-            return false;
-        }
+    // checkCollision(rocket, ship){
+    //     // simple AABB checking
+    //     if( rocket.x < ship.x + ship.width
+    //         && rocket.x + rocket.width > ship.x
+    //         && rocket.y < ship.y + ship.height
+    //         && rocket.height + rocket.y > ship.y)
+    //     {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+    checkCollision(a, b, offsetAX = 0, offsetAY = 0, offsetBX = 0, offsetBY = 0){
+        let aX = a.x - (offsetAX * a.width);
+        let aY = a.y - (offsetAY * a.height);
+        let bX = b.x - (offsetBX * b.width);
+        let bY = b.y - (offsetBY * b.height);
+
+        if (aX < bX + b.width &&
+            aX + a.width > bX &&
+            aY < bY + b.height &&
+            a.height + aY > bY){
+                return true;
+            } else {
+                return false;
+            }
     }
 
     shipExplode(ship){

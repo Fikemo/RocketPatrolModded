@@ -9,6 +9,8 @@ class Ball extends Phaser.GameObjects.Sprite{
 
         this.parent = parent;
 
+        let movementVector = (0,0);
+
         this.anims.create({
             key: 'ball',
 
@@ -34,6 +36,7 @@ class Ball extends Phaser.GameObjects.Sprite{
         this.state = {
             resting: true,
             restPoint: this.parent.restPoint,
+            hitByPlayer: false,
         }
 
         this.x = this.state.restPoint.x;
@@ -48,7 +51,20 @@ class Ball extends Phaser.GameObjects.Sprite{
 
             this.x = this.state.restPoint.x;
             this.y = this.state.restPoint.y;
+        } else if (this.state.hitByPlayer){
+            this.y -= this.moveSpeed;
+        } else {
+            this.y += this.moveSpeed;
         }
 
+        if (this.y < 0 - this.height * 0.5 || this.y > config.height + this.height * 0.5){
+            this.reset();
+        }
+
+    }
+
+    reset(){
+        this.state.hitByPlayer = false;
+        this.state.resting = true;
     }
 }

@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
 
         this.load.image("court", "./assets/court.png");
         this.load.image("whiteRacket", "./assets/whiteRacket.png");
+        this.load.image("blackRacket", "./assets/blackRacket.png");
         
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {
@@ -35,7 +36,7 @@ class Play extends Phaser.Scene {
         // this.sound.stopAll();
         // this.sound.play('playMusic',{volume: 0.2, loop: true});
 
-        this.playMusic = this.sound.add('playMusic', {volume: 0.1});
+        this.playMusic = this.sound.add('playMusic', {volume: 0.05});
         this.playMusic.play();
 
         // this.add.text(20, 20, "ROCKET PATROL PLAY");
@@ -62,7 +63,8 @@ class Play extends Phaser.Scene {
         // add spacehip (x3)
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0,0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding * 2, 'spaceship', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'blackRacket', 0, 10).setOrigin(0,0);
+        this.ship03.setScale(1.3);
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);

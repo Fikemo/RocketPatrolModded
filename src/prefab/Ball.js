@@ -1,20 +1,25 @@
-
-// tennis ball prefab
 class Ball extends Phaser.GameObjects.Sprite{
     constructor(scene, x, y, texture, frame, parent = null){
         super(scene, x, y, texture, frame);
 
-        // add the object to the existing scene
         scene.add.existing(this);
+        this.scene = scene;
 
         this.parent = parent;
+        console.log(this.parent);
 
-        let movementVector = (0,0);
+        this.centerVector = [0,1];
+        this.rightVector = [0.5, Math.sqrt(3)/2];
+        this.leftVector = [-0.5, Math.sqrt(3)/2];
+        this.moveVector = this.centerVector;
+
+        this.direction = directions.CENTER;
+
+        this.directionModifier = -1;
 
         this.anims.create({
             key: 'ball',
-
-            frames: this.anims.generateFrameNumbers('ball', {
+            frames: this.anims.generateFrameNumbers('ball',{
                 start: 0,
                 end: 3,
                 first: 0,
@@ -25,46 +30,57 @@ class Ball extends Phaser.GameObjects.Sprite{
 
         this.anims.play('ball');
 
-        this.moveSpeed = 4;
-
-        console.log(parent);
-
-        if (this.parent == null) {
-            this.parent = { restPoint: { x: x, y: y} };
+        this.moveSpeed = 3;
+        
+        if (this.parent == null){
+            this.parent = { restPoint: { x: x, y: y } };
+        } else {
+            parent.ball = this;
         }
 
-        this.state = {
-            resting: true,
-            restPoint: this.parent.restPoint,
-            hitByPlayer: false,
-        }
+        this.resting = true;
+        this.restPoint = this.parent.restPoint;
+        this.hitByPlayer = false;
 
-        this.x = this.state.restPoint.x;
-        this.y = this.state.restPoint.y;
+        this.x = this.restPoint.x;
+        this.y = this.restPoint.y;
     }
 
     update(){
 
-        if (this.state.resting){
+        this.directionModifier = this.hitByPlayer ? -1 : 1;
 
-            this.state.restPoint = this.parent.restPoint;
+        if (this.resting){
+            this.restPoint = this.parent.restPoint;
 
-            this.x = this.state.restPoint.x;
-            this.y = this.state.restPoint.y;
-        } else if (this.state.hitByPlayer){
-            this.y -= this.moveSpeed;
+            this.x = this.restPoint.x;
+            this.y = this.restPoint.y;
         } else {
-            this.y += this.moveSpeed;
+
+            switch(this.direction){
+                case directions.CENTER:
+                    this.moveVector = this.centerVector;
+                break;
+                case directions.LEFT:
+                    this.moveVector = this.leftVector;
+                break;
+                case directions.RIGHT:
+                    this.moveVector = this.rightVector;
+                break;
+            }
+
+            this.x += this.moveVector[0] * this.moveSpeed;
+            this.y += this.moveVector[1] * this.moveSpeed * this.directionModifier;
         }
 
-        if (this.y < 0 - this.height * 0.5 || this.y > config.height + this.height * 0.5){
+        if (this.y < this.height / 2 || this.y > game.config.height + this.height / 2) {
             this.reset();
-        }
-
+            this.scene.setGameOver(true);
+        };
     }
 
     reset(){
-        this.state.hitByPlayer = false;
-        this.state.resting = true;
+        this.resting = true;
+        this.hitByPlayer = false;
     }
 }

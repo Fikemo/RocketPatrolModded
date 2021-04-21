@@ -32,7 +32,7 @@ class Menu extends Phaser.Scene {
              fixedWidth: 0,
         }
 
-        this.add.text(game.config.width/2, game.config.height/2 - 60, 'RACQUET PATROL', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - 60, 'RACQUET PATROL‽', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, '← 1 Player\n→ 2 Player', menuConfig).setOrigin(0.5);
         
         //define keys

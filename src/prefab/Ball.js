@@ -75,12 +75,20 @@ class Ball extends Phaser.GameObjects.Sprite{
 
         if (this.y < this.height / 2 || this.y > game.config.height + this.height / 2) {
             this.reset();
-            this.scene.setGameOver(true);
+            if (game.settings.endless) this.scene.setGameOver(true);
         };
     }
 
     reset(){
         this.resting = true;
         this.hitByPlayer = false;
+
+        if (game.settings.versus){
+            if (this.parent == this.scene.p2Racket){
+                this.scene.p1Racket.score++;
+            } else {
+                this.scene.p2Racket.score++;
+            }
+        }
     }
 }

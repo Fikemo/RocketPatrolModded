@@ -14,6 +14,11 @@ class Menu extends Phaser.Scene {
     }
 
     create(){
+
+        if (playMusic == null) playMusic = this.sound.add('playMusic', {volume: 0.1, loop: true});
+        playMusic.stop();
+        playMusic.play();
+
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -29,21 +34,31 @@ class Menu extends Phaser.Scene {
 
         this.add.text(game.config.width/2, game.config.height/2 - 60, 'RACQUET PATROL', menuConfig).setOrigin(0.5);
         this.add.text(game.config.width/2, game.config.height/2, '← 1 Player\n→ 2 Player', menuConfig).setOrigin(0.5);
-
-        menuConfig.backgroundColor = '#00FF00';
-        menuConfig.color = '#000';
         
         //define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        menuConfig.fontSize = '14px';
+        menuConfig.align = 'left';
+        this.add.text(game.config.width/2, game.config.height/2 + 100, `High Scores\n1P Endless: ${endlessHighScore}\n1P Time Attack: ${timeAttackHighScore}\n2P Endless: ${twoPlayerEndlessHighScore}\n2P Time Attack: ${twoPlayerTimeAttackHighScore}`, menuConfig).setOrigin(0.5);
     }
 
     update() {
+
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)){
-            this.scene.start('playScene');
+            game.settings = {
+                endless: false,
+                twoPlayer: false,
+            }
+            this.scene.start('playSettingsScene');
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)){
-            this.scene.start('twoPlayScene');
+            game.settings = {
+                endless: false,
+                twoPlayer: true,
+            }
+            this.scene.start('twoPlaySettingsScene');
         }
     }
 }

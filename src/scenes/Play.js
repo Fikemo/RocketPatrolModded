@@ -30,13 +30,10 @@ class Play extends Phaser.Scene {
     create(){
         this.court = this.add.sprite(0,0,"court").setOrigin(0,0);
 
-        this.playMusic = this.sound.add('playMusic', {volume: 0});
-        this.playMusic.play();
-
         this.p1Racket = new WhiteRacket(this, game.config.width/2, game.config.height - playerSpawnHeight, 'whiteRacket').setOrigin(0.75, 0.5);
         this.p1Racket.score = 0;
         
-        let w = (game.config.width - (borderSize * 6 * 2)) / 5;
+        let w = (game.config.width - (borderSize * 6 * 2)) / 4;
         let enemyGap = 30;
         this.enemyRacket01 = new EnemyRacket(this, w * 4, enemySpawnHeight, 'blackRacket', 0).setOrigin(0.25, 0.5);
         this.enemyRacket02 = new EnemyRacket(this, w * 3, enemySpawnHeight + enemyGap, 'blackRacket', 0).setOrigin(0.25, 0.5);
@@ -73,7 +70,22 @@ class Play extends Phaser.Scene {
             game.config.width - 120,
             game.config.height - 39,
             this.p1Racket.score,
-            scoreConfig);
+            scoreConfig
+        );
+        
+        this.clock = null;
+        if (!game.settings.endless){
+            this.clock = this.time.delayedCall(30000, ()=> {
+                this.gameOver = true;
+            }, null, this);
+
+            this.timerText = this.add.text(
+                53,
+                3,
+                Math.floor(this.clock.getRemainingSeconds()),
+                scoreConfig,
+            )
+        }
 
     }
 
@@ -87,13 +99,19 @@ class Play extends Phaser.Scene {
             this.enemyRacket04.update();
             this.enemyRacket05.update();
 
-            if (this.p1Racket.score > highScore) highScore = this.p1Racket.score;
+            if (this.clock != null) this.timerText.text = Math.floor(this.clock.getRemainingSeconds());
+
+            if (game.settings.endless){
+                if (this.p1Racket.score > endlessHighScore) endlessHighScore = this.p1Racket.score;
+            } else {
+                if (this.p1Racket.score > timeAttackHighScore) timeAttackHighScore = this.p1Racket.score;
+            }
 
             if (this.p1Racket.hitActive){
                 if (this.checkCollision(this.p1Racket, this.ball, 0.75, 0.5, 0.5, 0.5)){
                     if (this.ball.hitByPlayer == false) {
                         this.p1Racket.playHit();
-                        this.p1Racket.score++;
+                        if (this.ball.resting == false) this.p1Racket.score++;
                         this.scoreBottomRight.text = this.p1Racket.score;
                         console.log(this.ball);
                         console.log(this.p1Racket);
@@ -122,13 +140,40 @@ class Play extends Phaser.Scene {
                 }
             }
         } else {
+
+            let textHeight = 33;
+            let textBuffer = 4;
+            let textTotal = textHeight + textBuffer;
+
+            let gameOverConfig = {
+                fontFamily: 'Courier',
+                fontSize: '28px',
+                backgroundColor: '#000000',
+                color: '#92DE00',
+                align: 'center',
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                    left: 4,
+                    right: 4,
+                },
+                fixedWidth: 0,
+            }
+            this.add.text(game.config.width/2, game.config.height/2 - textTotal, 'GAME OVER', gameOverConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2, `Score: ${this.p1Racket.score}`, gameOverConfig).setOrigin(0.5);
+            if (game.settings.endless){
+                this.add.text(game.config.width/2, game.config.height/2 + textTotal, `High Score: ${endlessHighScore}`, gameOverConfig).setOrigin(0.5);
+            } else {
+                this.add.text(game.config.width/2, game.config.height/2 + textTotal, `High Score: ${timeAttackHighScore}`, gameOverConfig).setOrigin(0.5);
+            }
+
+            this.add.text(game.config.width/2, game.config.height/2 + textTotal * 2, 'Press ↓ to Restart or (M) for Menu',gameOverConfig).setOrigin(0.5);
+
             if (Phaser.Input.Keyboard.JustDown(keyDOWN)){
-                this.playMusic.stop();
                 this.scene.restart();
             }
 
             if (Phaser.Input.Keyboard.JustDown(keyM)){
-                this.playMusic.stop();
                 this.scene.start("menuScene");
             }
         }

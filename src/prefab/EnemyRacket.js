@@ -3,7 +3,7 @@ class EnemyRacket extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
         
         scene.add.existing(this);
-        this.moveSpeed = 2;
+        this.moveSpeed = 3;
         this.moveDirection = 1;
 
         this.isHitting = false;

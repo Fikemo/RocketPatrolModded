@@ -35,7 +35,7 @@ class TwoPlaySettings extends Phaser.Scene {
 
         this.add.text(game.config.width/2, game.config.height/2 + 40, 'Co-Op: Endless or Time Attack with a friend.\nVersus: Take to either side of the court and be the first player to score 10 points.', menuConfig).setOrigin(0.5);
 
-        this.add.text(game.config.width/2, game.config.height/2 + 100, 'Controls\n ←→ to move. ↓ to swing\nHitting the ball while moving will cause it to move in that direction.', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + 100, 'Controls\n ←→ / AD to move. ↓ / S to swing\nHitting the ball while moving will cause it to move in that direction.', menuConfig).setOrigin(0.5);
     }
 
     update(){

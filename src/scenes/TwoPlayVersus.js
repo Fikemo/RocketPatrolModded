@@ -116,8 +116,6 @@ class TwoPlayVersus extends Phaser.Scene {
                 if (this.checkCollision(this.p1Racket, this.ball, 0.75, 0.5, 0.5, 0.5)){
                     if (this.ball.hitByPlayer == false) {
                         this.p1Racket.playHit();
-                        console.log(this.ball);
-                        console.log(this.p1Racket);
                     }
 
                     this.ball.hitByPlayer = true;
@@ -129,11 +127,8 @@ class TwoPlayVersus extends Phaser.Scene {
 
             if (this.p2Racket.hitActive){
                 if (this.checkCollision(this.p2Racket, this.ball, 0.25, 0.5, 0.5, 0.5)){
-                    console.log("p2 attemting hit");
                     if (this.ball.hitByPlayer == true) {
                         this.p1Racket.playHit();
-                        console.log(this.ball);
-                        console.log(this.p2Racket);
                     }
                     if (this.ball.resting) this.p1Racket.playHit();
 

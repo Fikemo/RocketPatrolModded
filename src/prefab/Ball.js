@@ -6,7 +6,6 @@ class Ball extends Phaser.GameObjects.Sprite{
         this.scene = scene;
 
         this.parent = parent;
-        console.log(this.parent);
 
         this.centerVector = [0,1];
         this.rightVector = [0.5, Math.sqrt(3)/2];

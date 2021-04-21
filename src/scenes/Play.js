@@ -113,8 +113,6 @@ class Play extends Phaser.Scene {
                         this.p1Racket.playHit();
                         if (this.ball.resting == false) this.p1Racket.score++;
                         this.scoreBottomRight.text = this.p1Racket.score;
-                        console.log(this.ball);
-                        console.log(this.p1Racket);
                     }
 
                     this.ball.hitByPlayer = true;
@@ -128,7 +126,7 @@ class Play extends Phaser.Scene {
 
                 for (let i = 0; i < shipsArray.length; i++){
                     if (this.checkCollision(this.ball, shipsArray[i], 0.5,0.5,0.25,0.5) && this.ball.hitByPlayer == true){
-                        if (this.ball.hitByPlayer == true) {this.p1Racket.playHit(); console.log(this.ball); console.log(shipsArray[i]);}
+                        if (this.ball.hitByPlayer == true) {this.p1Racket.playHit();}
 
                         shipsArray[i].isHitting = true;
                         shipsArray[i].rotations = shipsArray[i].maxRotations;

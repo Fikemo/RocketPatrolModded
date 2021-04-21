@@ -167,8 +167,6 @@ class TwoPlay extends Phaser.Scene {
                         this.p1Racket.playHit();
                         if (!this.ball.resting) this.p1Racket.score++;
                         this.p1ScoreText.text = this.p1Racket.score.toString();
-                        console.log(this.ball);
-                        console.log(this.p1Racket);
                     }
 
                     this.ball.hitByPlayer = true;
@@ -183,8 +181,6 @@ class TwoPlay extends Phaser.Scene {
                         this.p2Racket.playHit();
                         if (!this.ball.resting) this.p2Racket.score++;
                         this.p2ScoreText.text = this.p2Racket.score.toString();
-                        console.log(this.ball);
-                        console.log(this.p2Racket);
                     }
 
                     this.ball.hitByPlayer = true;

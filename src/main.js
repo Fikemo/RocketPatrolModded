@@ -1,3 +1,20 @@
+// Finn Morrison
+// Racquet Patrol
+// 
+// Points
+// Novice Tier:
+// Display the time remain (in seconds) on the screen (10) (Only applicable when playing Time Attack)
+// Shrek Tier:
+// Implement a smimultaneous two-player mode (30)
+// Redesign the game's artwork, UI, and sound to change its theme/aesthetic (It's a tennis game now)
+// Bonuses:
+// Track a high score that persists across scenes and display it in the UI (5)
+// Add your own (copyright-free) background music to the game (5)
+// All the new game mechanics (INFINITE)
+// 
+// Music: https://opengameart.org/content/busy-day-at-the-market
+// SFX: https://youtu.be/KOMtMxqrKqU
+
 let config = {
     type: Phaser.CANVAS,
     width: 640,
